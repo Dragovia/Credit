@@ -14,7 +14,9 @@
         .card { background: #fff; border-radius: 14px; box-shadow: 0 6px 20px rgba(2,12,27,0.06); padding: 18px; border: 1px solid #e5e7eb; }
         h2 { font-size: 16px; margin: 0 0 12px; color: #0b2a5b; }
         label { display: block; font-size: 12px; color: #4b5563; margin-top: 8px; }
-        input, select { width: 100%; padding: 11px 12px; border: 1px solid #d1d5db; border-radius: 10px; margin-top: 6px; font-size: 14px; background: #fff; }
+        input, select { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; margin-top: 4px; font-size: 14px; background: #fff; box-sizing: border-box; }
+        .form-row { display: flex; gap: 8px; }
+        .form-row input { flex: 1; }
         input[type="submit"], button.primary, a.button { margin-top: 12px; background: #1f6feb; color: #fff; border: 0; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-block; }
         input[type="submit"]:hover, button.primary:hover, a.button:hover { background: #1858bd; }
         a.secondary { background: #fff; color: #1f6feb; border: 1px solid #cfe0ff; }
@@ -63,8 +65,16 @@
             <h2>Add Customer</h2>
             {% if not is_authenticated %}<p class="muted">Login required to submit.</p>{% endif %}
             <form action="/add_customer" method="post">
-                <label>Name</label>
-                <input type="text" name="name" required />
+                <div class="form-row">
+                    <div>
+                        <label>First Name</label>
+                        <input type="text" name="first_name" required />
+                    </div>
+                    <div>
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" required />
+                    </div>
+                </div>
                 <label>Email</label>
                 <input type="email" name="email" required />
                 <input type="submit" value="Add Customer" {% if not is_authenticated %}disabled{% endif %} />

@@ -98,7 +98,9 @@ def logout():
 @app.route("/add_customer", methods=["POST"])
 @login_required
 def add_customer_route():
-    name = request.form["name"]
+    first_name = request.form["first_name"]
+    last_name = request.form["last_name"]
+    name = f"{first_name} {last_name}"
     email = request.form["email"]
     add_customer(name, email)
     return redirect("/")
