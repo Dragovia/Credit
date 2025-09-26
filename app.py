@@ -8,6 +8,44 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret")
 initialize_firebase_app()
 setup_tables()
 
+# ----- Demo Data Seeding -----
+def seed_demo_data() -> None:
+    # Only seed if there are no customers yet
+    if get_customers():
+        return
+    demo_customers = [
+        ("Alice Johnson", "alice@example.com"),
+        ("Bob Smith", "bob@example.com"),
+        ("Carol Davis", "carol@example.com"),
+        ("David Wilson", "david@example.com"),
+        ("Eva Brown", "eva@example.com"),
+        ("Frank Miller", "frank@example.com"),
+        ("Grace Lee", "grace@example.com"),
+        ("Henry Clark", "henry@example.com"),
+        ("Ivy Lewis", "ivy@example.com"),
+        ("Jack Walker", "jack@example.com"),
+    ]
+    for name, email in demo_customers:
+        add_customer(name, email)
+    # Create simple accounts for first few customers
+    accounts = [
+        (1, "Checking", 1200.00),
+        (1, "Savings", 5400.50),
+        (2, "Checking", 300.00),
+        (3, "Savings", 9000.00),
+        (4, "Checking", -25.00),
+        (5, "Savings", 150.00),
+        (6, "Checking", 750.75),
+        (7, "Savings", 50.00),
+        (8, "Checking", 0.00),
+        (9, "Savings", 1234.56),
+    ]
+    for customer_id, account_type, balance in accounts:
+        add_account(customer_id, account_type, balance)
+
+if os.getenv("DEMO_MODE", "false").lower() == "true":
+    seed_demo_data()
+
 # ----- Home Page -----
 @app.route("/")
 def home():
@@ -16,6 +54,9 @@ def home():
     cookie_name = os.getenv("SESSION_COOKIE_NAME", "session")
     cookie = request.cookies.get(cookie_name)
     is_authenticated = False
+    # In demo mode, treat user as authenticated for UI enabling
+    if os.getenv("DEMO_MODE", "false").lower() == "true":
+        is_authenticated = True
     if cookie:
         try:
             verify_session_cookie(cookie)
