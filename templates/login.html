@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+<h1>Sign In</h1>
+<div>
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="login">Login</button>
+</div>
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('login').addEventListener('click', async () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        try {
+            const cred = await signInWithEmailAndPassword(auth, email, password);
+            const idToken = await cred.user.getIdToken();
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/sessionLogin';
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'idToken';
+            input.value = idToken;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        } catch (e) {
+            alert(e.message);
+        }
+    });
+</script>
+</body>
+</html>
