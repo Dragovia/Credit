@@ -131,8 +131,8 @@
 
         <div class="card">
             <h2>System Report</h2>
-            <p><span class="tag">Total Balance</span> <span class="right">${{ report.total_balance or 0 }}</span></p>
-            <p><span class="tag">Average Balance</span> <span class="right">${{ report.avg_balance or 0 }}</span></p>
+            <p><span class="tag">Total Balance</span> <span class="right">${{ "%.2f"|format(report.total_balance or 0) }}</span></p>
+            <p><span class="tag">Average Balance</span> <span class="right">${{ "%.2f"|format(report.avg_balance or 0) }}</span></p>
             <h3>Negative Balances</h3>
             {% if report.negative_balances and report.negative_balances|length > 0 %}
             <ul>
