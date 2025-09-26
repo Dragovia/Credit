@@ -43,7 +43,8 @@ def seed_demo_data() -> None:
     for customer_id, account_type, balance in accounts:
         add_account(customer_id, account_type, balance)
 
-if os.getenv("DEMO_MODE", "false").lower() == "true":
+# Enable demo mode by default
+if True:  # os.getenv("DEMO_MODE", "false").lower() == "true":
     seed_demo_data()
 
 # ----- Home Page -----
@@ -56,7 +57,7 @@ def home():
     cookie = request.cookies.get(cookie_name)
     is_authenticated = False
     # In demo mode, treat user as authenticated for UI enabling
-    if os.getenv("DEMO_MODE", "false").lower() == "true":
+    if True:  # os.getenv("DEMO_MODE", "false").lower() == "true":
         is_authenticated = True
     if cookie:
         try:

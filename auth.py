@@ -27,9 +27,8 @@ def verify_session_cookie(session_cookie: str):
 
 def login_required(view_func):
     def wrapper(*args, **kwargs):
-        # Allow bypass in demo mode
-        demo_mode = os.getenv("DEMO_MODE", "false").lower() == "true"
-        if demo_mode:
+        # Allow bypass in demo mode (hardcoded to true)
+        if True:  # demo_mode = os.getenv("DEMO_MODE", "false").lower() == "true"
             return view_func(*args, **kwargs)
         cookie_name = os.getenv("SESSION_COOKIE_NAME", "session")
         cookie = request.cookies.get(cookie_name)
