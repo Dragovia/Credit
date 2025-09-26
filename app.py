@@ -51,6 +51,7 @@ if os.getenv("DEMO_MODE", "false").lower() == "true":
 def home():
     customers = get_customers()
     report = generate_report()
+    repo_url = os.getenv("GITHUB_REPO_URL", "")
     cookie_name = os.getenv("SESSION_COOKIE_NAME", "session")
     cookie = request.cookies.get(cookie_name)
     is_authenticated = False
@@ -63,12 +64,13 @@ def home():
             is_authenticated = True
         except Exception:
             is_authenticated = False
-    return render_template("index.html", customers=customers, report=report, is_authenticated=is_authenticated)
+    return render_template("index.html", customers=customers, report=report, is_authenticated=is_authenticated, repo_url=repo_url)
 
 # ----- Login (Firebase Session) -----
 @app.route("/login")
 def login_page():
-    return render_template("login.html")
+    repo_url = os.getenv("GITHUB_REPO_URL", "")
+    return render_template("login.html", repo_url=repo_url)
 
 
 @app.route("/sessionLogin", methods=["POST"])
