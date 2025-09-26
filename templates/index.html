@@ -26,6 +26,20 @@
         .table th { background: #f8fafc; color: #334155; font-weight: 600; }
         .right { text-align: right; }
         .tag { display: inline-block; padding: 2px 8px; font-size: 12px; background: #eef2ff; color: #3730a3; border-radius: 9999px; border: 1px solid #e0e7ff; }
+        .accounts-section { grid-column: 1 / -1; }
+        .accounts-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        .accounts-table th, .accounts-table td { padding: 12px; text-align: left; border-bottom: 1px solid #f1f5f9; }
+        .accounts-table th { background: #f8fafc; color: #334155; font-weight: 600; font-size: 13px; }
+        .accounts-table td { font-size: 14px; }
+        .account-id { font-family: 'Courier New', monospace; color: #6b7280; }
+        .account-type { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
+        .account-type.checking { background: #dbeafe; color: #1e40af; }
+        .account-type.savings { background: #dcfce7; color: #166534; }
+        .balance { font-weight: 600; }
+        .balance.positive { color: #059669; }
+        .balance.negative { color: #dc2626; }
+        .balance.zero { color: #6b7280; }
+        .customer-name { font-weight: 500; color: #1f2937; }
     </style>
 </head>
 <body>
@@ -118,6 +132,39 @@
             </ul>
             {% else %}
             <p class="muted">None.</p>
+            {% endif %}
+        </div>
+
+        <div class="card accounts-section">
+            <h2>All Accounts</h2>
+            {% if accounts and accounts|length > 0 %}
+            <table class="accounts-table">
+                <thead>
+                    <tr>
+                        <th>Account ID</th>
+                        <th>Customer</th>
+                        <th>Account Type</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for account in accounts %}
+                    {% set customer = customers|selectattr('0', 'equalto', account[1])|first %}
+                    <tr>
+                        <td class="account-id">#{{ account[0] }}</td>
+                        <td class="customer-name">{{ customer[1] if customer else 'Unknown' }}</td>
+                        <td>
+                            <span class="account-type {{ account[2].lower() }}">{{ account[2] }}</span>
+                        </td>
+                        <td class="balance {% if account[3] > 0 %}positive{% elif account[3] < 0 %}negative{% else %}zero{% endif %}">
+                            ${{ "%.2f"|format(account[3]) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="muted">No accounts found.</p>
             {% endif %}
         </div>
     </div>
